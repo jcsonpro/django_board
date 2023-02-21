@@ -68,3 +68,12 @@ Superuser created successfully.
 책에서는 .gitignore 파일에 db.sqlite3 도 추가   
 집과 회사에서 동시 개발할때 필요할 듯 하여 추가하지 않음   
 
+# APP 생성 (140p)
+```shell
+(django_board) D:\workspace\django_board>python manage.py startapp blog
+
+(django_board) D:\workspace\django_board>python manage.py startapp single_pages
+```
+
+
+
