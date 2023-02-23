@@ -11,6 +11,9 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{% static 'blog/bootstrap-5.0.2-dist/css/bootstrap.min.css' %}" media="screen">
 
+    <!-- fontawesome-->
+    <link rel="stylesheet" href="{% static 'blog/fontawesome-6.3.0-web/css/all.min.css' %}" media="screen">
+
 </head>
 <body>
 <!-- Responsive navbar-->
@@ -45,9 +48,9 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <button class="btn btn-outline-dark btn-block align-middle">로그인</button>
-                        <button class="btn btn-outline-dark btn-block align-middle">사용자등록</button>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-secondary"><i class="fas fa-sign-in-alt fa-shake"></i>&nbsp;Sign-in</button>
+                        <button type="button" class="btn btn-outline-secondary"><i class="fas fa-user-plus fa-shake"></i>&nbsp;Sign-up</button>
                     </div>
                 </div>
             </div>
@@ -59,61 +62,28 @@
 </div>
 
 <!-- Page header with logo and tagline-->
-<header class="py-1 bg-light border-bottom mb-4">
-    <div class="container">
-        <div class="text-center my-5">
-            <!-- 상단메뉴와 간격을 위해 비워둠 -->
-        </div>
-    </div>
-</header>
+<!--<header class="py-1 bg-light border-bottom mb-4">-->
+<!--    <div class="container">-->
+<!--        <div class="text-center my-5">-->
+<!--            &lt;!&ndash; 상단메뉴와 간격을 위해 비워둠 &ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
 
 
 <!-- Page content-->
 <div class="container">
     <div class="row my-3">
-        <!-- Blog entries-->
-        <div class="col-lg-8">
-
-            <!-- Featured blog post-->
-            <div class="card mb-4">
-                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg"
-                                  alt="..."/></a>
-                <div class="card-body">
-                    <div class="small text-muted">January 1, 2022</div>
-                    <h2 class="card-title">Featured Post Title</h2>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid
-                        atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero
-                        voluptate voluptatibus possimus, veniam magni quis!</p>
-                    <a class="btn btn-primary" href="#!">Read more →</a>
-                </div>
-            </div>
-
-            <!-- Pagination-->
-            <nav aria-label="Pagination">
-                <hr class="my-0"/>
-                <ul class="pagination justify-content-center my-4">
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a>
-                    </li>
-                    <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">15</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>
-                </ul>
-            </nav>
-        </div>
-
         <!-- Side widgets-->
         <div class="col-lg-4">
             <!--  search-->
-            <div class="card mb-4">
-                <div class="card-header">Search</div>
+            <div class="card mb-2">
+                <div class="card-header">검색</div>
                 <div class="card-body">
                     <div class="input-group">
                         <input class="form-control" type="text" placeholder="Enter search term..."
                                aria-label="Enter search term..." aria-describedby="button-search"/>
-                        <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                        <button class="btn btn-primary btn-sm" id="button-search" type="button">Go!</button>
                     </div>
                 </div>
             </div>
@@ -140,6 +110,39 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            {% for p in post_list %}
+            <!-- Featured blog post-->
+            <div class="card mb-4">
+                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg"
+                                  alt="..."/></a>
+                <div class="card-body">
+                    <div class="small text-muted">{{ p.created_at }}, 작성자</div>
+                    <h2 class="card-title">{{ p.title }}</h2>
+                    <p class="card-text">{{ p.content }}</p>
+                    <a class="btn btn-primary btn-sm" href="#!">Read more →</a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination-->
+            <nav aria-label="Pagination">
+                <hr class="my-0"/>
+                <ul class="pagination justify-content-center my-4">
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a>
+                    </li>
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">15</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
 <!-- Footer-->
@@ -148,5 +151,9 @@
 </footer>
 <!-- Bootstrap core JS-->
 <script src="{% static 'blog/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- fontawesome core JS-->
+<script src="{% static 'blog/fontawesome-6.3.0-web/js/all.min.js' %}"></script>
+
 </body>
 </html>
