@@ -102,7 +102,29 @@
                     {% endif %}
                 </figure>
                 <!-- Post content-->
-                <section class="mb-5">{{ post.content }}</section>
+                <section class="mb-2">{{ post.content }}</section>
+                {% if post.file_upload %}
+                <section class="mb-2">
+                    <a href="{{ post.file_upload.url }}" class="btn btn-outline-dark btn-sm" role="button">
+                        {% if post.get_file_ext == 'csv' %}
+                            <i class="fa-regular fa-file-csv"></i>
+                        {% elif post.get_file_ext == 'xlsx' or post.get_file_ext == 'xls' %}
+                            <i class="fa-sharp fa-regular fa-file-excel"></i>
+                        {% elif post.get_file_ext == 'docx' or post.get_file_ext == 'doc' %}
+                            <i class="fa-regular fa-file-word"></i>
+                        {% elif post.get_file_ext == 'pptx' or post.get_file_ext == 'ppt' %}
+                            <i class="fa-solid fa-file-powerpoint"></i>
+                        {% elif post.get_file_ext == 'pdf' %}
+                            <i class="fa-sharp fa-regular fa-file-pdf"></i>
+                        {% elif post.get_file_ext == 'zip' %}
+                            <i class="fa-solid fa-file-zipper"></i>
+                        {% else %}
+                            <i class="fa-solid fa-file"></i>
+                        {% endif %}
+                        {{ post.get_file_name }}
+                    </a>
+                </section>
+                {% endif %}
             </article>
             <!-- Comments section-->
             <section class="mb-5">
