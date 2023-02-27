@@ -10,17 +10,29 @@ class TestView(TestCase):
 
     def navbar_test(self, soup):
         navbar = soup.nav
-        self.assertIn('노동복지 빅데이터 포털', navbar.text)
-        self.assertIn('Home', navbar.text)
-        self.assertIn('지식정보', navbar.text)
-        self.assertIn('데이터맵', navbar.text)
-        self.assertIn('분석환경', navbar.text)
-        self.assertIn('Log-In', navbar.text)
+        self.assertIn('Blog', navbar.text)
+        self.assertIn('About Me', navbar.text)
+
+        logo_btn = navbar.find('a', text='Do It Django')
+        self.assertEqual(logo_btn.attrs['href'], '/')
+
+        home_btn = navbar.find('a', text='Home')
+        self.assertEqual(home_btn.attrs['href'], '/')
+
+        blog_btn = navbar.find('a', text='Blog')
+        self.assertEqual(blog_btn.attrs['href'], '/blog/')
+
+        about_me_btn = navbar.find('a', text='About Me')
+        self.assertEqual(about_me_btn.attrs['href'], '/about_me/')
 
     def test_post_list(self):
         response = self.client.get('/blog/')
         self.assertEqual(response.status_code, 200)
+
         soup = BeautifulSoup(response.content, 'html.parser')
+        
+        self.assertEqual(soup.title.text, 'Blog')
+
         self.navbar_test(soup)
 
     def test_post_detail(self):
@@ -32,5 +44,6 @@ class TestView(TestCase):
         response = self.client.get(post_000.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
+
         self.navbar_test(soup)
 
