@@ -11,7 +11,10 @@
             <img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..."/>
             {% endif %}
             <div class="card-body">
-                <div class="small text-muted">{{ p.created_at }}, 작성자</div>
+                <div class="small text-muted">
+                    Posted on {{ p.created_at }} by
+                    <a href="#">{{ p.author | upper }}</a>
+                </div>
                 <h2 class="card-title">{{ p.title }}</h2>
                 {% if p.hook_text %}
                 <h5 class="text-muted">{{ p.hook_text }}</h5>
@@ -38,7 +41,7 @@
         {% endfor %}
     {% else %}
     <div class="card mb-4">
-        <h2>Ooops!!</h2>
+        <h2>아직 게시물이 없습니다</h2>
     </div>
     {% endif %}
 {% endblock %}
