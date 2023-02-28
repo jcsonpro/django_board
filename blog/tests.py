@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from bs4 import BeautifulSoup
-from .models import Post
+from .models import Post, Category
 
 
 # Create your tests here.
@@ -10,6 +10,31 @@ class TestView(TestCase):
         self.client = Client()
         self.user_trump = User.objects.create_user(username='trump', password='somepassword')
         self.user_obama = User.objects.create_user(username='obama', password='somepassword')
+
+        self.category_programming = Category.objects.create(name='programming', slug='programming')
+        self.category_music = Category.objects.create(name='music', slug='music')
+
+        # 포스를 만든다
+        self.post_001 = Post.objects.create(
+            title='첫 번째 포스트 입니다.',
+            content='Hello World. 1st',
+            category=self.category_programming,
+            author=self.user_trump,
+        )
+
+        self.post_002 = Post.objects.create(
+            title='두 번째 포스트 입니다.',
+            content='Hello World. 2nd',
+            category=self.category_music,
+            author=self.user_obama,
+        )
+
+        # 포스트가 하나 있다
+        self.post_003 = Post.objects.create(
+            title='세번째 포스트입니다.',
+            content='Hello world, 3rd',
+            author=self.user_trump,
+        )
 
     def navbar_test(self, soup):
         navbar = soup.nav
@@ -48,19 +73,6 @@ class TestView(TestCase):
         main_area = soup.find('div', id='main-area')
         self.assertIn('아직 게시물이 없습니다', main_area.text)
 
-        # 포스를 만든다
-        post_001 = Post.objects.create(
-            title='첫 번째 포스트 입니다.',
-            content='Hello World. 1st',
-            author=self.user_trump,
-        )
-
-        post_002 = Post.objects.create(
-            title='두 번째 포스트 입니다.',
-            content='Hello World. 2nd',
-            author=self.user_obama,
-        )
-        
         # 두개가 만들어 졌는지 확인
         self.assertEqual(Post.objects.count(), 2)
 
@@ -71,8 +83,8 @@ class TestView(TestCase):
 
         # main-area에 포스트 제목 2개가 나타난다
         main_area = soup.find('div', id='main-area')
-        self.assertIn(post_001.title, main_area.text)
-        self.assertIn(post_002.title, main_area.text)
+        self.assertIn(self.post_001.title, main_area.text)
+        self.assertIn(self.post_002.title, main_area.text)
 
         # 아직 게시물이 없습니다 라는 문구는 더 이상 나타나지 않는다
         self.assertNotIn('아직 게시물이 없습니다', main_area.text)
@@ -84,19 +96,11 @@ class TestView(TestCase):
         self.navbar_test(soup)
 
     def test_post_detail(self):
-
-        # 포스트가 하나 있다
-        post_001 = Post.objects.create(
-            title='첫번째 포스트입니다.',
-            content='Hello world',
-            author=self.user_trump,
-        )
-
         # 그 포스트의 url은 'blog/1/' 이다
-        self.assertEqual(post_001.get_absolute_url(), '/blog/1/')
+        self.assertEqual(self.post_001.get_absolute_url(), '/blog/1/')
 
         # 포스트의 상세 페이지 를 불러온다
-        response = self.client.get(post_001.get_absolute_url())
+        response = self.client.get(self.post_001.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -106,19 +110,18 @@ class TestView(TestCase):
         self.assertIn('About Me', navbar.text)
 
         # 포스트의 제목이 웹 브라우저에 탭 타이틀에 들어 있다
-        self.assertIn(post_001.title, soup.title.text)
+        self.assertIn(self.post_001.title, soup.title.text)
 
         # 포스트의 제목이 포스트 영역에 있다
         main_area = soup.find('div', id='main-area')
         post_area = main_area.find('div', id='post-area')
-        self.assertIn(post_001.title, post_area.text)
+        self.assertIn(self.post_001.title, post_area.text)
 
         # 포스트의 내용이 포스트 영역에 있다
-        self.assertIn(post_001.content, post_area.text)
+        self.assertIn(self.post_001.content, post_area.text)
 
         # 작성자가 post-area에 있다
         self.assertIn(self.user_trump.username.upper(), post_area.text)
 
         # navbar가 제대로 보인다
         self.navbar_test(soup)
-
